@@ -18,7 +18,7 @@
 * In `/scratch/<username>/home/mate-commander`, checkout the branch `randomWalksCluster`
 * In `/scratch/<username>/home/test_dir/mate`, checkout the branch `randomWalks`
 * In `/scratch/<username>/home/test_dir/bin/mate-server`, checkout the branch `randomWalks`
-* In `/scratch/<username>/home/test_dir/bin/mate-server`, execute the file `generate.sh`
+* In `/scratch/<username>/home/test_dir/bin`, execute the file `generate.sh`
 * Open the file `/scratch/<username>/home/test_dir/generate_configs.py` with your favourite text editor.
 * The configurations for the random walks with code-based fitness are in the dict `props_blocks` (has nothing to do with block coverage, is just called like that, because I once palanned on doing block coverage)
 * The configurations for the random walks with branch distance are in the dict `props_branches`
