@@ -32,3 +32,15 @@
 * Now execute `/scratch/<username>/test_dir/genereate_configs.py`
 * Edit the file `/scratch/<username>/home/test_dir/batch_run.py`, so that the correct cluster nodes are used. The random walks are preferably executed on pontipine, but zeus works as well
 * Execute `/scratch/<username>/home/test_dir/batch_run.py`
+
+## Extraction of the random walks
+* Clone the AndroidAnalysis-Repository into the `/scratch/<username>` folder
+* Cd into the project and checkout the branch `randomWalks`
+* Open the file `config.ini` and adjust the paths, mainly by exchanging my username with your's
+* Set the `walk_len` to the length of your walks (if you specified an iteration number of x, the walk length is 6x + 1)
+* Create the two folders you specified under `data_dir` and `svg_dir`
+* Run `python3.9 main.py config.ini <run_id>`
+* Ignore the output in `svg_dir`, the diagrams are generated in the jupyter notebooks
+* For all successful runs, the random walks will be written to `data_dir`!
+* The contents of data_dir can be copied into the `dataset/random_walks` subfolder of the bachelor's thesis repository. The jupyter notebooks will per-default search this folder for input data.
+* It is normal that some runs will fail. Execute the `count.py` script to figure out, how many successful runs you already have per app and fitness function. Then you know how much runs you need to retry!
