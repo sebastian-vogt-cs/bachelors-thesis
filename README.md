@@ -85,4 +85,5 @@
 * Create the folder you specified under `mio_data`
 * Run `python3.9 main.py config.ini <run_id>`
 * For all successful runs, the mio runs will be written to `mio_data`!
+* Currently, only the three apps that were used with MIO in the thesis result in successful runs. If you want to use the other two apps as well, you have to add them to the dict at the top of the `mio_runs.py` plugin and specify the (correct) number of branches for every app. The jupyter notebooks have never been tried with other apps than the three ones from the thesis though, so it is not guaranteed to work.
 * The contents of mio_data can be copied into the `dataset/mio_runs` subfolder of the bachelor's thesis repository. The jupyter notebooks will per-default search this folder for input data.
