@@ -1,0 +1,762 @@
+% !TeX document-id = {6dd354cd-74f7-4d60-8bae-792f9125b728}
+% !TeX spellcheck = en_GB
+% !TeX encoding = utf8
+% !TeX program = pdflatex
+% !BIB program = biber
+% -*- coding:utf-8 mod:LaTeX -*-
+
+% http://latextemplates.github.io/scientific-thesis-template/
+% vv  scroll down to line 200 for content  vv
+
+
+\let\ifdeutsch\iffalse
+\let\ifenglisch\iftrue
+\input{pre-documentclass}
+\documentclass[
+  % fontsize=11pt is the standard
+  a4paper,  % Standard format - only KOMAScript uses paper=a4 - https://tex.stackexchange.com/a/61044/9075
+  twoside,  % we are optimizing for both screen and two-side printing. So the page numbers will jump, but the content is configured to stay in the middle (by using the geometry package)
+  bibliography=totoc,
+  %               idxtotoc,   %Index ins Inhaltsverzeichnis
+  %               liststotoc, %List of X ins Inhaltsverzeichnis, mit liststotocnumbered werden die Abbildungsverzeichnisse nummeriert
+  headsepline,
+  cleardoublepage=empty,
+  parskip=half,
+  %               draft    % um zu sehen, wo noch nachgebessert werden muss - wichtig, da Bindungskorrektur mit drin
+  draft=false
+]{scrbook}
+\input{config}
+
+
+\usepackage[
+  title={Analysing the Influence of the Fitness Function on the Fitness Landscape of the Android Black-Box Test Generation Problem},
+  author={Sebastian Vogt},
+  type={Bachelor's Thesis},
+  institute=University\ of\ Passau\\Innstr.\ 41\\94032\ Passau\\Germany, % or other institute names - or just a plain string using {Demo\\Demo...}
+  course={Computer Science},
+  examiner={Prof.\ Dr.\ Gordon Fraser},
+  supervisor={Prof.\ Dr.\ Gordon Fraser,\\\ Sebastian\ Schweikl},
+  startdate={October 24, 2022},
+  enddate={February 3, 2023}
+]{scientific-thesis-cover}
+
+\hypersetup{
+	colorlinks=false
+}
+
+\definecolor{myGray}{RGB}{211, 210, 214}
+
+\mdfdefinestyle{box}{%
+	skipabove=10,skipbelow=10pt,
+	frametitlebackgroundcolor=myGray}
+
+\makeindex
+
+\begin{document}
+	
+%tex4ht-Konvertierung verschönern
+\iftex4ht
+  % tell tex4ht to create picures also for formulas starting with '$'
+  % WARNING: a tex4ht run now takes forever!
+  \Configure{$}{\PicMath}{\EndPicMath}{}
+  %$ % <- syntax highlighting fix for emacs
+  \Css{body {text-align:justify;}}
+
+  %conversion of .pdf to .png
+  \Configure{graphics*}
+  {pdf}
+  {\Needs{"convert \csname Gin@base\endcsname.pdf
+      \csname Gin@base\endcsname.png"}%
+    \Picture[pict]{\csname Gin@base\endcsname.png}%
+  }
+\fi
+
+%\VerbatimFootnotes %verbatim text in Fußnoten erlauben. Geht normalerweise nicht.
+
+\input{commands}
+\pagenumbering{arabic}
+\Titelblatt
+
+%Eigener Seitenstil fuer die Kurzfassung und das Inhaltsverzeichnis
+\deftriplepagestyle{preamble}{}{}{}{}{}{\pagemark}
+%Doku zu deftriplepagestyle: scrguide.pdf
+\pagestyle{preamble}
+\renewcommand*{\chapterpagestyle}{preamble}
+
+
+%Kurzfassung / abstract
+%auch im Stil vom Inhaltsverzeichnis
+\ifdeutsch
+  \section*{Kurzfassung}
+\else
+  \section*{Abstract}
+\fi
+
+When creating black-box tests for an Android app, it is desirable to generate the required GUI input sequences fully automatically.
+The MIO algorithm is an evolutionary approach to test generation, meaning that it applies concepts from biological evolution to optimize tests towards a coverage criterion (e.g. branch coverage).
+This coverage criterion has to be expressed in terms of a fitness function, which calculates how close a test is to covering a specific coverage goal (e.g. branch).
+The most common fitness function, branch distance, has proven to be complex to calculate in practice because it relies on distance calculations on the control-flow graph.
+Therefore we propose a simpler fitness function, code-based fitness, which only relies on information available directly in the code.
+A comparison of the search success of MIO with the two fitness functions showed that code-based fitness fails to cover many branches, which means that in its current form, it still lacks the capabilities of the more powerful branch distance fitness function.
+Additionally to the success comparison, fitness landscape analysis was applied to the MIO algorithm with the two fitness functions, which showed that the fitness landscape of code-based fitness is more neutral than the fitness landscape of branch distance.
+Unfortunately, this result cannot be used to explain the search behaviour.
+
+\cleardoublepage
+
+\chapter*{Acknowledgments}
+I first want to thank my two advisors, Prof. Dr. Gordon Fraser and Sebastian Schweikl, who guided me through the whole process and always had good suggestions when I was stuck.
+I also want to thank Michael Auer, who always supported me when I had problems with MATE.
+Special thanks go to my lectors Kassian Köck, Nikolas Kirschstein, Thomas Kirz, and my father Dietmar Vogt for providing me with great feedback.
+
+
+
+% BEGIN: Verzeichnisse
+
+\iftex4ht
+\else
+  \microtypesetup{protrusion=false}
+\fi
+
+%%%
+% Literaturverzeichnis ins TOC mit aufnehmen, aber nur wenn nichts anderes mehr hilft!
+% \addcontentsline{toc}{chapter}{Literaturverzeichnis}
+%
+% oder zB
+%\addcontentsline{toc}{section}{Abkürzungsverzeichnis}
+%
+%%%
+
+%Produce table of contents
+%
+%In case you have trouble with headings reaching into the page numbers, enable the following three lines.
+%Hint by http://golatex.de/inhaltsverzeichnis-schreibt-ueber-rand-t3106.html
+%
+%\makeatletter
+%\renewcommand{\@pnumwidth}{2em}
+%\makeatother
+%
+\tableofcontents
+
+% Bei einem ungünstigen Seitenumbruch im Inhaltsverzeichnis, kann dieser mit
+% \addtocontents{toc}{\protect\newpage}
+% an der passenden Stelle im Fließtext erzwungen werden.
+
+\listoffigures
+\listoftables
+
+%Wird nur bei Verwendung von der lstlisting-Umgebung mit dem "caption"-Parameter benoetigt
+%\lstlistoflistings
+%ansonsten:
+\iffalse
+\ifdeutsch
+  \listof{Listing}{Verzeichnis der Listings}
+\else
+  \listof{Listing}{List of Listings}
+\fi
+\fi
+
+\iffalse
+%mittels \newfloat wurde die Algorithmus-Gleitumgebung definiert.
+%Mit folgendem Befehl werden alle floats dieses Typs ausgegeben
+\ifdeutsch
+  \listof{Algorithmus}{Verzeichnis der Algorithmen}
+\else
+  \listof{Algorithmus}{List of Algorithms}
+\fi
+%\listofalgorithms %Ist nur für Algorithmen, die mittels \begin{algorithm} umschlossen werden, nötig
+\fi
+
+% Abkürzungsverzeichnis
+\printnoidxglossaries
+
+\iftex4ht
+\else
+  %Optischen Randausgleich und Grauwertkorrektur wieder aktivieren
+  \microtypesetup{protrusion=true}
+\fi
+
+% END: Verzeichnisse
+
+
+% Headline and footline
+\renewcommand*{\chapterpagestyle}{scrplain}
+\pagestyle{scrheadings}
+\pagestyle{scrheadings}
+\ihead[]{}
+\chead[]{}
+\ohead[]{\headmark}
+\cfoot[]{}
+\ofoot[\usekomafont{pagenumber}\thepage]{\usekomafont{pagenumber}\thepage}
+\ifoot[]{}
+
+
+%% vv  scroll down for content  vv %%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Main content starts here
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter{Introduction}
+When testing Android applications, it is not only important to test the individual methods and classes with white-box tests, but also to test the app under test (AUT) by interacting with its graphical user interface in the form of black-box testing.
+Of course, it is desirable to generate the required GUI input sequences fully automatically.
+An active branch of research regarding the automatic generation of both white-box and black-box tests focuses on generating tests with the help of evolutionary  algorithms (e.g., \cite{mao2016sapienz, panichella2017automated, fraser2012whole, arcuri2018test, panichella2015reformulating}).
+
+All these approaches have in common that they optimize tests towards fulfilment of a \emph{fitness function}, which calculates a heuristic value signifying how close a test is to fulfilling a specific testing criterion like line coverage or branch coverage \cite{mcminn2004search}.
+Intuitively, a fitness function is a quantization of the Darwinian idea of fitness.
+
+Often, the fitness function is not inherently part of an evolutionary algorithm and different fitness functions can be utilized to receive different search behaviours or results.
+A promising approach in automatic black-box test generation is the utilization of the MIO algorithm \cite{arcuri2018test} in conjunction with the MATE testing framework \cite{MATE}, which was originally developed for uncovering accessibility flaws in Android apps \cite{eler2018automated}.
+However, there is not yet a canonical fitness function associated with this approach.
+
+The most widely used fitness function in this area is the branch distance \cite{korel1990automated} combined with the approach level \cite{wegener2001evolutionary, wegener2002automatic} (e.g., \cite{panichella2015reformulating, panichella2017automated, fraser2012whole}).
+However, the branch distance + approach level function is rather sophisticated and can thus become unwieldy in space and time complexity.
+Simpler fitness functions have also been applied in the past (e.g., \cite{sell2019empirical}), but it is unclear whether the reduced complexity of simpler fitness functions outweigh the improved guidance of branch coverage + approach level or not.
+
+Evolutionary algorithms and their configurations can of course be compared to each other empirically (e.g., \cite{sell2019empirical, fraser2014large, panichella2018large}), but further insight into how and why different techniques perform differently is often gained with a method called fitness landscape analysis (e.g., \cite{albunian2020causes, vogel2019does, aleti2017analysing}).
+Fitness landscape analysis aims at characterizing the underlying topological structure of the search space, with two important properties of fitness landscapes being \emph{ruggedness} and \emph{neutrality} \cite{pitzer2012comprehensive}.
+
+The goal of this work is to compare branch distance + approach level with a proposed simpler fitness function with regards to their search behaviour in the execution of MIO and to gain further insight into the fitness function's influence on the behaviour of MIO by analysing its \emph{ruggedness} and \emph{neutrality}. By knowing what each fitness function's influence on the behaviour of MIO is, one can hope to make a more informed decision about which fitness function to use in reality and how the existing fitness functions can be improved for the future.
+
+
+\chapter{Background}
+
+\section{Evolutionary Optimization}
+
+Before explaining the MIO algorithm itself in section \ref{sec:mio}, this section seeks to build a basic understanding of metaheuristic and evolutionary optimization and lay the groundwork for the section about the MIO algorithm.
+
+Test generation can be modelled as a deterministic combinatorial optimization problem, which is defined by Bianchi et al.~\cite{bianchi2009survey} as follows:
+
+\begin{quote}
+	Given a finite set S of feasible solutions x and a real valued cost function G(x), find $\min_{x \in S} G(x)$
+\end{quote}
+
+The set $S$ is called the \textbf{search space} \cite{bianchi2009survey}, and in our case it contains all possible test cases.
+The cost function is called \textbf{fitness function} throughout this work. Some fitness functions map the best individual to the highest number instead of the lowest, in which case the minimum has to be replaced by the maximum in the above definition.
+
+Finding an optimal solution to many optimization problems can be computationally infeasible, which is why we utilize metaheuristics, which are algorithms that find good solutions in reasonable time \cite{bianchi2009survey}.
+Metaheuristics are defined by Blum et al.~\cite{blum2003metaheuristics} as follows:
+\begin{quote}
+	Metaheuristics are high level concepts for exploring \textbf{search spaces} by using different
+	strategies.
+	These strategies should be chosen in such a way that a dynamic balance is
+	given between the \textbf{exploitation} of the accumulated search experience [...] and the \textbf{exploration} of the search space [...].
+	This balance is necessary on one side to quickly
+	identify regions in the search space with high quality solutions and on the other side
+	not to waste too much time in regions of the search space which are either already
+	explored or don’t provide high quality solutions. [emphasis added].
+\end{quote}
+
+An important subset of metaheuristic algorithms are evolutionary algorithms, which are inspired by Darvinian evolution \cite{bianchi2009survey}. Bianchi et al.~\cite{bianchi2009survey} explained the general idea of evolutionary algorithms as follows:
+\begin{quote}	
+	Every iteration of the algorithm corresponds to a generation, where certain operators are applied to some individuals of the current population to generate the individuals of the population of the next generation. [...] At each generation, only some individuals are selected for being elaborated by variation operators, or for being just repeated in the next generation without any change, on the base of their fitness measure (this can be the objective function value, or some kind of quality measure). Individuals with higher fitness have a higher probability to be selected. In this metaheuristic, \textbf{exploration} is provided by mutation and recombination operators, while \textbf{exploitation} of obtained information on good solutions is enabled by the selection mechanism. [emphasis added, italics removed].
+\end{quote}
+
+This means that by selecting solutions with high fitness to become part of the next generation, the information about the search space provided by exploration is exploited. Without exploitation, the search space would be explored randomly, and good solutions would be found purely by chance.
+
+\section{The MIO Algorithm}\label{sec:mio}
+
+Some successful approaches in automatic test suite generation are the search algorithms WTS \cite{fraser2012whole} and MOSA \cite{panichella2017automated}, which all apply concepts of evolutionary optimization.
+Andrea Arcuri \cite{arcuri2018test} tries to improve upon the shortcomings of these algorithms by specifically tailoring the MIO algorithm to test generation problems and their properties.
+Sell et al.~\cite{sell2019empirical} have provided a good overview of the MIO Algorithm in pseudocode. A modified version of their code can be found in algorithm \ref{alg:cap}.
+Important aspects of MIO, as taken from its introductory paper \cite{arcuri2018test}, are explained in the following sections.
+
+\begin{algorithm}
+	\caption{The MIO Algorithm}\label{alg:cap}
+	\textbf{Input:} 
+	\begin{itemize}
+		\item search budget B
+		\item random sampling probability P$_r$
+		\item the amount of mutations per sampled test m (not used in the pseudocode for simplicity)
+		\item list of fitness functions L
+		\item population size limit n
+		\item start of focused search F
+	\end{itemize}
+	\textbf{Output:} Test suite of optimized test cases
+	\begin{algorithmic}[1]
+		\State archive $\gets$ createInitialPopulation()
+		\While{B is not used up}\label{alg:bud}
+		\If{rand() $<$ P$_r$} \label{alg:prob}
+		\State t $\gets$ createRandomIndividual()
+		\Else
+		\State t $\gets$ sampleIndividual(archive)
+		\State t $\gets$ mutate(t)
+		\EndIf
+		\For{each fitness function k in L} \label{alg:eval}
+		\State fitness $\gets$ k.getFitness(t)
+		\If{objective is covered by t} \label{alg:cov}
+		\State archive$_k$ $\gets$ $\{$t$\}$
+		\State archive$_k$.covered $\gets$ True
+		\ElsIf{objective is partially covered} \label{alg:rem}
+		\State archive$_k$ $\gets$ archive$_k$ $\cup$ $\{$t$\}$
+		\State resetCounter(k) \Comment{\textcolor{gray}{See section about \hyperref[sec:sampl]{feedback-directed sampling}}} \label{alg:reset}
+		\If{|archive$_k$| $>$ n \textbf{or} archive$_k$.covered} \label{alg:rem1}
+		\State removeWorstTest(archive$_k$)
+		\EndIf
+		\EndIf
+		\State updateParameters(F, P$_r$, n)
+		\EndFor
+		\EndWhile
+		\State \Return Set of all tests from the archive which fully cover the objective of their respective population
+	\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Many Independent Objective}
+
+MIO stands for \textbf{M}any \textbf{I}ndependent \textbf{O}bjective algorithm. This means that instead of optimizing just the overall coverage (e.g.~branch coverage) of a test, the overarching goal of the optimization is divided into a set of objectives (e.g.~branches), which each have their own fitness function to be optimized.
+Canonically, such a fitness function maps a test to the interval $[0, 1]$, where the objective is covered if and only if the heuristic value is equal to $1$.
+Any standard coverage function (like branch coverage) would only generate binary fitness values for each objective, so more specialized heuristics are needed for MIO to operate effectively.
+As the fitness function used can be viewed independently from the MIO algorithm, the further discussion of fitness functions is located in a later chapter.
+
+For every objective MIO seeks to optimize during execution, a population of $n$ tests is kept.
+The set of these populations is collectively called the \emph{archive}.
+Every population in the archive always contains the best tests for the specific fitness function that have been discovered yet.
+In the end, a single objective is either covered or not by the best test in its corresponding population.
+The final test suite emerges by collecting the best test for every covered objective.
+In algorithm \ref{alg:cap}, the input parameter $L$ is a list containing the fitness function for every objective and for every $k \in L$, $archive_k$ is the corresponding population.
+
+\subsubsection{The Base Procedure}
+
+In every iteration of the algorithm, a new test is either created at random with the probability $P_r$ or an existing test is \hyperref[sec:sampl]{sampled from the archive} and mutated $m$ times independently with the probability $1 - P_r$ (line \ref{alg:prob} of algorithm \ref{alg:cap}).
+This results in one or more new tests.
+(In algorithm \ref{alg:cap} the $m$ parameter is ignored and a test is mutated at most once instead of $m$ times in order to simplify the code.)
+For each of these tests, the following procedure is executed:
+For every objective, the fitness function of the newly created test is evaluated to obtain the fitness score $s$ and the test is inserted into the corresponding population (line \ref{alg:eval} et seq.) according to the following rules:
+\begin{itemize}
+	\item If $s = 1$ (line \ref{alg:cov} et seq.), the population size of this specific population will be permanently set to $1$ and the new test will replace the current population. (If the objective was already covered by the old population, it will only be replaced if the new test is shorter or has better coverage on other objectives. This logic is left out of the pseudocode for clarity.)
+	\item Otherwise (line \ref{alg:rem} et seq.), the test will be inserted, and if this causes the population size to exceed the limit, the worst test will be removed (line \ref{alg:rem1}). (This means that if the new test is worse than any existing tests in the population and the population is full, the new test will effectively be discarded.)
+\end{itemize}
+
+\subsubsection{Feedback-Directed Sampling}\label{sec:sampl}
+A simple strategy of sampling tests from the archive would be to choose a random non-covered objective and then a random test from the corresponding population. (It is important to remember that an objective is non-covered as long as there does not exist a test with fitness value $1$ with regard to that objective.)
+This would of course lead to a very thorough exploration of the search space, but in the end, having few covered objective is favourable over having many half-way covered objectives, since only fully covered objectives increase the overall coverage.
+For this reason, feedback-directed sampling enables MIO to focus on objectives that provide a clear uphill-direction, while neglecting objectives that are infeasible or have otherwise plateaued.
+
+In feedback-directed sampling, every objective has a counter initialized to $0$.
+It intuitively measures the time since the last fitness improvement for its objective. 
+The sampling algorithm now chooses a test randomly from the non-covered population with the lowest counter value.
+More precisely, the counter is incremented whenever a test is sampled from its corresponding population and reset to 0 when a new test replaces an old test in its population (line \ref{alg:reset}).
+
+\subsubsection{Exploration/Exploitation Control}
+While it is important to focus the search on gradients of the fitness landscape that have already been discovered (exploitation), it is also crucial to discover such gradients in the first place (exploration).
+Exploration is best done in the beginning of the search, so that the end of the search can be used to maximize as many found gradients as possible.
+The transition from exploration to exploitation in MIO is controlled with the $F$ parameter. It defines how much of the search budget has to be used up for the focused search (= exploitation mode) to begin.
+Exploration and exploitation is principally controlled by values of the $P_r$, $n$ and $m$ parameters. These values are initialized with certain values for exploration (e.g. $P_r = 0.5,\ n = 10,\ m = 1$, as suggested in the original paper).
+Then, these values decrease linearly to reach the values for the focused search (e.g. $P_r = 0,\ n = 1,\ m = 10$).
+
+$P_r$ usually decreases in the course of the search, because a lower likelihood of creating a new random test leads to a lower degree of exploration. The $n$ value is also decreased, because a lower $n$ value leads to the search focusing on the best test for each objective and thus a higher degree of exploitation. A high $m$ value strengthens this effect by mutating a single sampled individual multiple times and thus focusing on improving this one before moving on to a different individual.
+
+\subsubsection{The Input Parameters}
+
+In this section, the input parameters of MIO are explained in the same order in which they are given in algorithm \ref{alg:cap}. It is also briefly mentioned how the respective parameters are used in the algorithm.
+
+\begin{itemize}
+	\item The search budget $B$, in its simplest form, is just the amount of time the search takes. More generally, it represents an amount of a resource that is used up during the search. When the resource is depleted, the search ends. It is used in the main loop of the algorithm in line \ref{alg:bud}.
+	\item The random sampling probability $P_r$ defines how likely it is that a new test will be created in each iteration instead of an old one being mutated. It is used in line \ref{alg:prob}.
+	\item The parameter $m$ defines how often the same test should be mutated before a new one is sampled. At the beginning of the search, this value usually is $1$. In algorithm \ref{alg:cap}, $m$ is always set to $1$, so as not to overcomplicate the pseudocode.
+	\item The list of fitness functions $L$: For every objective MIO optimizes towards, a heuristic fitness function is given. It is $1$ if and only if the objective is covered and its value approximates how far the objective is from being covered.
+	\item The population size limit $n$: MIO operates on an archive of tests, which consist of one population for each objective. $n$ is the maximum number of tests any of these populations can hold.
+	\item The start of focused search F is the percentage of the search budget, after which the focused search begins. Focused means that instead of discovering new tests in the search space, the goal is merely to further improve existing tests. The focused search mode is set by mutating the parameters $P_r$, $n$ and $m$, for example to $P_r = 0$, $n = 1$, $m = 10$. This change does not happen at once, the values change linearly during the first part of the search.
+\end{itemize}
+
+\section{Configuring MIO for Android Black-Box Testing}
+
+A crucial part of MIO that is not defined in the algorithm itself is the fitness function used.
+Before defining the fitness function, we must define the set of objectives for the search.
+In this work, we choose the common testing criterion of branch coverage and thus we use the set of all non-library branches in the app under test as the set of objectives.
+Now we need to define a fitness function for every objective, which takes a test case as input and returns a heuristic value indicating how far the test case is from covering the base objective.
+Since the fitness functions for each objective are constructed in the same way, we call this construction itself simply a \emph{fitness function}.
+
+Next to the widely adopted branch distance + approach level function we propose a novel fitness function, which aims to reduce the computational complexity of the fitness evaluations.
+Practical experience shows that the fitness evaluations are a great contributor to the execution time of genetic algorithms, which is why we defined the simpler fitness function.
+The next two sections explain both fitness functions in detail. 
+
+\subsection{Branch Distance Plus Approach Level}\label{branch}
+
+The branch distance function was introduced by Korel \cite{korel1990automated} for automatic testing of Pascal programs.
+Originally, it was used in the context of optimizing test input towards the execution of a specific target path in the control flow graph.
+
+Let $\{n_i\}_{i \in \mathcal{N}}$ be the set of nodes in the control flow graph and let the target path $P$ be ${<n_{k_1}, n_{k_2}, ..., n_{k_l}>}$.
+Say the current test input $x_i$ leads to an execution that follows the target path up to $n_{k_i}$.
+This means that at the branch $(n_{k_i}, n_{k_{i+1}})$, the control flow takes a wrong turn.
+The goal is now to start a local search procedure that generates a new test input $x_{i+1}$ which executes the target path until $n_{k_{i+1}}$.
+This process is then repeated until the whole target path is covered.
+
+For this we need a function that tells us how far the current test input is away from taking the branch $(n_{k_i}, n_{k_{i+1}})$ at the branching statement $n_{k_i}$.
+We assume that the branching statement $n_{k_i}$ is of the form $x\ \Phi\ y$ with $\Phi \in \{<, \leq, >, \geq, =, \neq\}$.
+In any case, this can be reformulated to $F(x, y) < 0$, $F(x, y) \leq 0$ or $F(x, y) = 0$ (e.g. $x < y \Leftrightarrow x - y < 0$).
+
+Now we have the branch distance function F, a fitness function that must be minimized, that depends solely on the testing input and that can be calculated dynamically during program execution.
+The branch distance function for $(n_{k_i}, n_{k_{i+1}})$ can only be used if the execution reaches the branching statement $n_{k_i}$ in the first place. Otherwise the branch distance for a specific branch might be optimal without the branch being covered, because the control flow is somewhere else.
+In Korel's \cite{korel1990automated} work this is not a problem, since the branch distance is by design only used as a fitness function when the corresponding branching statement has been reached. 
+In the MIO approach meanwhile, tests are optimized towards covering a branch directly, without looking at a specific path in the control flow graph.
+This means that branch distance as a fitness function in MIO only provides guidance as soon as a test reaches the branching statement and is a plateau otherwise.
+
+This is why Wegener et al.~\cite{wegener2001evolutionary} introduced the approach level (originally called approximation level) to provide guidance for reaching the required branching statement for a specific branch.
+It \enquote{is defined as the distance between the closest control dependency of the target node executed by a test and the target node in the control dependency graph} \cite{albunian2020causes}.
+To the approach level, the branch distance of the said control dependency is added to form the branch distance + approach level fitness function. In the following, the combination of branch distance and approach level is just called \textbf{branch distance fitness} for short, the approach level is implied.
+
+\subsection{Code Based Fitness Function}\label{code}
+
+We propose a fitness function $f$ which provides guidance for covering branches in the code. In order to receive a more lightweight function than branch distance, we do not use the control-flow graph but calculate distances solely based on features of the code itself. This is why we call it \textbf{code-based fitness}.
+
+We define $f$ to be a maximizing fitness function in the interval $[0, 1]$. This means that for a test case and a branch, the value of $f$ should be one if the test case covers the branch and in $[0, 1)$ if it does not cover the branch. In the latter case, the value of $f$ should provide an approximation of how close the test case comes to covering the objective.
+
+For this it is helpful to have a measure of closeness between two branches. Then, the fitness of a test case regarding a  target branch is just the closeness between the target branch and the closest branch reached during test execution.
+To define such a measure, we must first understand how branches are represented in MATE. Each branch is identified by a string that is based on the smali \cite{smali} assembler language, for example \texttt{Luk/co/example/package/ExampleClass;->exampleMethod()Z->4}.
+
+This representation consists of the following parts, delimited by an arrow (\texttt{->}):
+\begin{itemize}
+	\item The full class name \texttt{Luk/co/example/package/ExampleClass;} (note that class names are always prefixed with ''\texttt{L}'' and suffixed with ''\texttt{;}''),
+	\item the full method name with argument types and return type \texttt{exampleMethod()Z}, where \texttt{Z} stands for boolean and denotes the return type, 
+	\item and a number $n$ denoting the $n$-th branch in the bytecode, counted from top to bottom.
+\end{itemize}
+
+From here on, we represent a branch as $c_1 c_2 ... c_l m n$, where $c_1/c_2/.../c_{l-1}$ is the package path of the class name, $c_l$ is the class name itself, $m$ is the method name and $n$ is the number of the branch.
+We define the closeness of two branches $t = c_1 c_2 ... c_l m n$ and $\tilde{t} = \tilde{c}_1 \tilde{c}_2 ... \tilde{c}_{\tilde{l}} \tilde{m} \tilde{n}$, depending on the parameter $\alpha$ the following way:
+Let $p_i = c_1 c_2 ... c_i\ \forall i \in \{1, ..., l\}$
+\begin{equation}\label{eq:codeBasedFitness}
+closeness(t, \tilde{t}) = \left \{
+\begin{array}{ll}
+	1 & \text{if}\ \ t = \tilde{t}\\
+	\frac{2}{3} + \frac{1}{3} \cdot \frac{\alpha}{|n - \tilde{n}| + \alpha} & \text{if}\ \ c_1 c_2 ... c_l m = \tilde{c}_1 \tilde{c}_2 ... \tilde{c}_{\tilde{l}} \tilde{m}\\
+	\frac{1}{3} & \text{if}\ \ c_1 c_2 ... c_l = \tilde{c}_1 \tilde{c}_2 ... \tilde{c}_{\tilde{l}}\\
+	0 + \frac{1}{3} \cdot \frac{\max \{i | p_i = \tilde{p}_i\}}{\max \{l, \tilde{l}\}} & \text{else}
+\end{array}
+\right.
+\end{equation}
+
+The basic structure of this function are the four basic steps $0, \frac{1}{3}, \frac{2}{3}$ and $1$:
+\begin{itemize}
+	\item if the branches are in different root packages, the closeness is $0$, 
+	\item if they are in the same class, the closeness is $\frac{1}{3}$,
+	\item and if they are the same branch, the closeness is $1$.
+\end{itemize}
+
+Between $0$ and $\frac{1}{3}$, additional guidance is provided by the function $\frac{1}{3} \cdot \frac{\max \{i | p_i = \tilde{p}_i\}}{\max \{l, \tilde{l}\}}$. It is a linear function dependent on the amount of consecutive packages that match in the beginning of the class name. The longer the prefixes of the class names match, the higher this value.
+
+Between $\frac{2}{3}$ and $1$, additional guidance is provided by the function $\frac{1}{3} \cdot \frac{\alpha}{|n - \tilde{n}| + \alpha}$. This is a rational function dependent on the number of branches between the input branches. It is $\frac{1}{3}$ at $0$ and converges to zero, as the input variable ($|n - \tilde{n}|$) increases. The parameter $\alpha$ controls how fast the convergence is. For smaller $\alpha$ it converges faster, for larger $\alpha$, it converges slower.
+
+Now we can define the fitness with regards to the branch $\hat{b}$ of a test case $t$ that executes the branches $\{b_1, ..., b_n\}$ as
+\begin{equation}
+	f_{\hat{b}}(t) = \max_{b \in \{b_1, ..., b_n\}}{closeness(b, \hat{b})}.
+\end{equation}
+
+\subsection{Test Case Representation and Mutation}
+In addition to the fitness function, MIO does also not specify how exactly test cases look like and how the mutation function works.
+In MATE \cite{MATE}, test cases are represented as action sequences filled with GUI actions like clicks \cite{sell2019empirical} and we set their size to 50 actions, which is the value used by Sell et al.~\cite{sell2019empirical}.
+The initial population is created by sampling one chromosome at random. 
+Random sampling happens by executing a random GUI action in the app 50 times and saving the executed actions to receive an action sequence.
+In our experiments, we use the cut point mutation function already implemented in the MATE framework \cite{MATE}, which was also used by Sell et al.~\cite{sell2019empirical} in conjunction with MIO.
+The cut point mutation function cuts off the event sequence of a test after a random event (this may leave the sequence empty) and then randomly generates new actions from that point onwards to create a mutation.
+
+
+\section{The Fitness Landscape of MIO}
+
+The past sections were mainly concerned with explaining MIO, the test case generation algorithm used in this work. The rest of the background chapter will revolve around fitness landscape analysis, which we want to apply to MIO in order to analyse its search behaviour.
+By performing fitness landscape analysis on MIO with the two fitness functions respectively, we want to gain insight into how the choice of fitness function influences the search behaviour of MIO.
+
+Sewall Wright \cite{wright1932roles} first thought out the idea of a fitness landscape as part of his work on evolutionary biology.
+He imagined the field of all possible gene combinations as a plane where closely related ones are located closely together. The fitness values of these gene combinations then generate a plastic landscape on top of that flat plain.
+This can be best imagined as a 2-d plain with the fitness values plotted in the third dimension.
+In this metaphor, the process of evolution can be seen as the individuals of a population exploring their neighbourhood on the fitness landscape by means of reproduction.
+Natural selection then leads to the population climbing up slopes in the fitness landscape instead of navigating it randomly.
+
+At the end of a slope often lies a local optimum, which could be a (near)-optimal solution to the search problem and thus a good result of the optimization.
+If this is not the case however, the search budget spent on climbing that slope is often wasted, and different parts of the fitness landscape have to be explored instead.
+Intuitively, this problem arises more often when the fitness landscape has more local optima, which is why it is important to look at the set of local optima in fitness landscape analysis.
+A concept which builds upon the notion of local optima is \textbf{ruggedness}, which is defined as \enquote{the frequency of changes in slope from up-hill to down-hill} \cite{pitzer2012comprehensive}.
+When dealing with a high-ruggedness landscape, it can be expected that the evolutionary search struggles with climbing desirable optima in the presence of many local optima.
+
+When dealing with a low-ruggedness landscape on the other hand, it is important to know whether the regions of the fitness landscape without changes in slope actually have a slope in the first place or are dominated by plateaus.
+The latter case can be detrimental to an evolutionary search algorithm, because the absence of a slope renders the selection mechanism useless, locally turning the search into a random exploration of the landscape.
+This is why in order to get a sounder view of the fitness landscape, it is important to pair the study of ruggedness with the concept of \textbf{neutrality}, which is defined as the \enquote{degree, to which a landscape contains \emph{connected areas of equal fitness}} \cite{albunian2020causes}.
+
+To quantify ruggedness and neutrality, a common approach is to sample a part of the fitness landscape with a random walk, which is generated by starting with a random individual and then sampling a random neighbour on the fitness landscape $n$ times, and then apply a specific measure to the resulting fitness sequence \cite{pitzer2012comprehensive}.
+
+Albunian et al.~\cite{albunian2020causes} successfully used a set of measures of ruggedness and neutrality to show that the Java unit test generation problem with an evolutionary algorithm suffers from a high degree of neutrality in the fitness landscape, which negatively affects the success of the test generation.
+Due to the similarity of their problem to ours, we use a subset of their measures in our own work.
+We use them to analyse the ruggedness and neutrality of the fitness landscapes generated by the code-based and branch distance fitness functions respectively.
+After a short theoretical definition of the fitness landscape of MIO, section \ref{sec:measures} specifies the measures of ruggedness and neutrality used in the fitness landscape analysis of this work.
+
+\subsubsection{Defining the Fitness Landscape of the MIO Algorithm}
+
+While an abstract definition of fitness landscapes can be found in the survey by Pitzer and Affenzeller \cite{pitzer2012comprehensive}, the goal of this section is to provide a use-case specific definition based on the general one.
+Let $S$ be the search space containing all possible tests.
+While a solution to the MIO algorithm is made up of multiple tests, we look at the fitness landscape per objective, where a single test is a successful solution if and only if it covers the objective.
+
+We ignore the issues of encoding the test case and of genotype-phenotype mapping since the representation of a test case does not yield any theoretical significance and both mutations and fitness evaluations are done directly on the test cases. 
+Let $f: S \rightarrow \mathbb{R}$ be the fitness function given by the chosen base fitness function and the objective.
+W.l.o.g. we assume that $f: S \rightarrow [0, 1]$ and that $f(t) = 1$ signifies that the objective is covered by test $t$.
+
+To complete the notion of a fitness landscape we now need a distance function $d: S \times S \rightarrow \mathbb{R}$ on the search space.
+This distance is implied by the genetic operator, in our case the testCaseCutPointMutation operator.
+This mutation operator has the property that any test can possibly be generated out of a specific test by mutation.
+This means we cannot define the distance function in the standard way, where the distance between two test cases is defined as the amount of mutations it takes to go from one test case to the other.
+Instead, we propose a stochastic definition that is based on the probability that a mutation on testcase $t$ results in testcase $t'$ which we denote as $\mathbb{P}_t(t')$:
+\begin{equation}
+	d: S \times S \rightarrow \mathbb{R},
+	(t, t') \mapsto 1 - \mathbb{P}_t(t')
+\end{equation}
+
+This completes the definition of a fitness landscape as $\mathcal{F} = (S, f, d)$
+
+\section{The Measures of Ruggedness and Neutrality}\label{sec:measures}
+
+In this work, we employ a subset of the fitness landscape measures used by Albunian et al.~\cite{albunian2020causes}.
+
+\subsection{Measures of Ruggedness}
+
+\subsubsection{Autocorrelation}
+
+The autocorrelation is one of the most basic measures of ruggedness and it is calculated by correlating a fitness sequence with its shifted self \cite{pitzer2012comprehensive}.
+Given a fitness sequence $\{f_t\}_{t = 1}^{N}$ and the shift step size $k$, the autocorrelation is defined as
+\begin{equation}
+	r_k(\{f_t\}_{t = 0}^{n}) = \frac{\sum_{i = 1}^{N - k} (f_i - \bar{f}) (f_{i+k} - \bar{f})}{\sum_{i = 1}^{N} (f_i - \bar{f})^2}
+\end{equation}
+where $\bar{f}$ is the mean of all fitness values \cite{albunian2020causes}.
+This measure is usually interpreted as higher autocorrelation values corresponding to a more correlated fitness landscape and thus less ruggedness \cite{albunian2020causes}.
+
+\subsubsection{Information Content}
+Vassilev et al.~\cite{vassilev2000information} proposed a set of fitness landscape measures that are based on the information characteristics of (random) walks.
+The motivation for these measures is that classical measures like autocorrelation \enquote{do not go far enough and give us only a vague notion of the structure of the landscapes} \cite{vassilev2000information}.
+All proposed new measures are based on a fitness sequence $\{f_t\}_{t = 0}^{n}$, more precisely on a string derived from the sequence, which only captures its ups and downs and ignores the amplitudes. We use the \emph{information content}, which is the most prominent of the proposed measures. This subsection is entirely based on the paper by Vassilev et al.~\cite{vassilev2000information}.
+
+Before we can define the actual measure, we have to derive a string of ups and downs from our fitness sequence.
+
+\begin{definition}[String associated with a fitness sequence]\label{def:string}
+	Let $\{f_{t}\}_{t = 0}^{n}$ be a fitness sequence and let $\varepsilon > 0$ be the accuracy.\\
+	Then $S(\varepsilon) = s_{1}s_{2}s_{3}...s_{n}$ with
+	\[
+	s_{i} = \left\{
+	\begin{array}{ll}
+		\bar{1}, & \text{if}\ \ f_{i} - f_{i-1} < -\varepsilon\\
+		0, & \text{if}\ \ |f_{i} - f_{i-1}| \leq \varepsilon\\
+		1, & \text{if}\ \ f_{i} - f_{i-1} > \varepsilon\\
+	\end{array}
+	\right.
+	\]
+	is the string associated with the fitness sequence.
+\end{definition}
+
+Now we can define the measure itself, called the \emph{information content}.
+
+\begin{definition}[information content (entropic measure)]
+	The information content is defined as
+	\[
+	H(\varepsilon) := - \sum_{p \neq q} P_{[pq]} \log_{6} P_{[pq]}
+	\]
+	with 
+	\[
+	P_{[pq]} := \frac{n_{[pq]}}{n}
+	\]
+	where $n_{[pq]}$ is the number of occurences of the substring $pq$ in $S(\varepsilon)$ and $n$ is the number of substrings of length $2$ in $S(\varepsilon)$.
+\end{definition}
+
+\enquote{[T]he IC measure is meant to characterize the ruggedness of the landscape where a value close to 1 indicates a large number of peaks in the landscape, i.e., a rugged landscape} \cite{albunian2020causes}.
+
+\subsection{Measures of Neutrality}
+
+\subsubsection{Neutrality Distance}
+
+The neutrality distance merely counts the number of equal values at the beginning of a fitness sequence, so for $\{f_t\}_{t = 1}^{n}$ it is defined as
+\begin{equation}
+	nd(\{f_t\}_{t = 1}^{n}) = \max \{k | f_0 = ... = f_k\}
+\end{equation}
+and a higher neutrality distance is indicative of a more neutral landscape \cite{albunian2020causes}.
+
+\subsubsection{Neutrality Volume}
+This measure is explained by Albunian et al.~\cite{albunian2020causes} as follows:
+\begin{quote}
+	Neutrality Volume (NV) is another measure of neutrality based on the number of neighbo[u]ring areas of individuals with equal fitness during the random walk. For example, the NV of the sequence of fitness values $\{f_t\}_{t = 0}^{7} = \{0.3, 0.3, 0.3, 0.2, 0.2, 0.7, 0.7\}$ is 3 as there are 3 areas of equal fitness with values 0.3, 0.2 and 0.7. The NV of $\{f_t\}_{t = 0}^{7} = \{0.3, 0.3, 0.1, 0.2, 0.2, 0.7, 0.4\}$ is 5. The interpretation of the two cases is that the landscape in the first example is expected to be flatter than of the second example as more of the fitness values are equal.
+\end{quote}
+
+\subsection{Aggregating the Information Content}\label{sec:aggr}
+
+The information content measure relies on a value $\varepsilon$, which can sensibly be set to a value between $\varepsilon = 0$ and $\varepsilon = \varepsilon^{*}$, which is the lowest value at which the information content is $0$ \cite{vassilev2000information}.
+For the analysis in this paper, we require the information content to yield a singular value, which is why we need a method to aggregate over different $\varepsilon$-values.
+Malan and Engelbrecht \cite{malan2009quantifying} have proposed a method to generate a singular information content value without having to chose a specific $\varepsilon$-value.
+The basis for their strategy is a set of $n$ random walks, which are independently generated on the same landscape.
+The goal is then to approximate the theoretical formula
+\begin{equation}
+	R = \max_{\varepsilon \in [0, \varepsilon^{*}]} \mathcal{H}(\varepsilon),
+\end{equation}
+where the $\mathcal{H}(\varepsilon)$ denotes the theoretical information content of the entire landscape.
+To achieve this, the first random walk is used to calculate $\varepsilon^{*}$.
+Then, the information content $H_i(\varepsilon)$ of every random walk $i = 1, ..., n$ is calculated for each $\varepsilon \in \{0, \frac{\varepsilon^{*}}{128}, \frac{\varepsilon^{*}}{64}, \frac{\varepsilon^{*}}{32}, \frac{\varepsilon^{*}}{16}, \frac{\varepsilon^{*}}{8}, \frac{\varepsilon^{*}}{4}, \frac{\varepsilon^{*}}{2}, \varepsilon^{*}\} = E$.
+For each $\varepsilon$, the mean information content $\bar{H}(\varepsilon)$ over all $n$ random walks is calculated.
+The final measure is then computed as the maximum of these means over all $\varepsilon$-values.
+\begin{equation}
+	R \approx \max_{\varepsilon \in E} \bar{H}(\varepsilon) = \max_{\varepsilon \in E} \frac{1}{n}\sum_{i = 1}^{n} H_i(\varepsilon).
+ 	\end{equation}
+
+Unfortunately this method is not applicable in our case, since we want to have one value for every random walk and not just one value over all repetitions of the random walk.
+For this reason, we propose a different method, based on the strategy by Malan and Engelbrecht, which we call direct aggregation.
+For every random walk, we calculate $\varepsilon^{*}$ and then the final measure with the formula:
+\begin{equation}
+	r = \max_{\varepsilon \in E} \{H(\varepsilon)\}
+\end{equation}
+For our results not to be distorted, it is important that the mean of the $r$-values over all repetitions is approximately equal to the $R$-value. So it should hold that:
+\begin{equation}\label{eq:directaggr}
+	\frac{1}{n} \sum_{i = 1}^{n} \max_{\varepsilon \in E} H_i(\varepsilon) \approx \max_{\varepsilon \in E} \frac{1}{n}\sum_{i = 1}^{n} H_i(\varepsilon)
+\end{equation}
+It is easy to find a counterexample that proves that this equivalence does not hold in general.
+This means that in order to use direct aggregation, it first has to be shown that this equality approximately holds for the given data.
+
+
+
+\chapter{Experimental Study}
+
+The goal of our experiments is to shed light on the influence of the fitness function on the fitness landscape and the search success of the MIO algorithm for Android black-box test generation. More precisely, we want find out how our own code-based fitness function (see section \ref{code}) compares to the branch distance fitness function (see section \ref{branch}), for which we devise the following research questions:
+
+\begin{enumerate}
+	\item[\textbf{RQ1}] How do the two fitness functions compare overall regarding the neutrality and ruggedness of the fitness landscape of the Android black-box test generation problem?
+	
+	\item[\textbf{RQ2}] Is there a per-objective statistical difference regarding neutrality and ruggedness of the fitness landscape generated by the two fitness functions?
+	
+	\item[\textbf{RQ3}] How do the two fitness functions compare overall regarding the success of the test generation with MIO?
+	
+	\item[\textbf{RQ4}] Is there a per-objective statistical difference regarding the success of the MIO executions with the two fitness functions?
+	
+	\item[\textbf{RQ5}] Can performance differences between the fitness functions be explained by the properties of the fitness landscape?
+\end{enumerate}
+
+The following section (\ref{sec:experimental_setup}) explains the experiment conducted as a basis for the entire study and in the sections thereafter (\ref{sec:rq1} - \ref{sec:rq5}) the analysis methods, results and discussion are included for each research question. 
+Ultimately, the threats to validity are discussed (section \ref{sec:threats}).
+
+\input{experimental_setup.tex}
+
+\input{rq0.tex}
+
+\input{rq1.tex}
+
+\input{rq2.tex}
+
+\input{rq3.tex}
+
+\input{rq4.tex}
+
+\input{rq5.tex}
+
+\input{case_study.tex}
+
+\input{threats_to_validity.tex}
+
+
+\chapter{Related Work}
+
+Albunian et al.~\cite{albunian2020causes} performed a fitness landscape analysis on the Java unit test generation problem.
+They used the MOSA algorithm \cite{panichella2015reformulating}, which similarly to MIO is a many-objective algorithm that operates on test cases.
+They use branch distance as a fitness function and a mutation operator that is based on the random deletion, insertion and editing of statements in a unit test.
+
+In their fitness landscape analysis, they performed random walks and calculated three measures of ruggedness and three measures of neutrality.
+To learn about the relationship of the fitness landscape to algorithm performance, they correlated the mean landscape measures with the success rates across all branches.
+Our fitness landscape analysis is largely based on their work, with the largest difference being that we correlated effect sizes instead of the measures themselves because we wanted to factor in the difference between the fitness functions.
+
+The main result of their work was that the fitness landscape of the Java unit test generation is dominated by plateaus and that this neutrality correlates with MOSA success, which suggests that the high neutrality is a major negative influence on algorithm performance.
+Looking at the source code, they found that the high neutrality is caused by private methods, methods that are hard to call without causing exceptions, as well as boolean comparisons, which result in a binary branch distance and thus do not provide guidance.
+
+Similarly to Albunian et al., Aleti et al.~\cite{aleti2017analysing} analysed the fitness landscape of the Java unit test generation problem. 
+One major difference is that they evolve whole test suites instead of single tests.
+This also means that the genetic algorithm they employ is not many-objective.
+Their fitness function is a mix of method coverage and the sum of all branch distances.
+
+They do not employ random walks for their fitness landscape analysis, but population-based walks, which are created by logging the fitness value from the best individual in every iteration of the genetic algorithm execution.
+The main focus of their work is on the crossover operator and how important it is for the search, which is why they executed their genetic algorithm with and without the usage of the crossover operator.
+
+One of the results of their work was that the fitness landscape of their problem suffers from neutrality, which they mainly attributed to the used fitness function.
+As a result of this neutrality, the crossover operator cannot fulfil its main use of escaping local optima.
+Also, they observed that the fitness function was only weakly correlated to the total branch and method coverage during the execution of the genetic algorithm.
+From these points, they conclude that the improvement of the fitness function has the potential to improve the overall search performance.
+Additionally, they conclude that the search is most successful when there is a slow but steady increase in fitness, which is not interrupted by plateaus or large jumps in fitness.
+
+While the two previous works focus on Java unit tests, the work by Vogel et al.~\cite{vogel2019does} focuses on the Android black-box test generation problem.
+Just like in our work, their tests are sequences of GUI actions.
+As an algorithm, they use SAPIENZ \cite{mao2016sapienz} with the NSGA-II heuristic \cite{deb2002fast}, which is a many-objective algorithm.
+It operates on test suites, but it can optimize towards a small number of independent fitness functions.
+In their case, the fitness functions focus on fault revelation, total coverage and test length.
+
+Like Aleti et al., they use fitness landscape measures that are calculated during the search for their fitness landscape analysis.
+These measures are mainly applied to get information about the diversity of the population during the execution of SAPIENZ.
+The main takeaway from the fitness landscape analysis is that the diversity of the population could be improved, which is why they extend SAPIENZ with specific measures to boost diversity.
+They empirically compared their extended version of SAPIENZ -- SAPIENZdiv -- with the baseline version, but unfortunately, the advantage of SAPIENZdiv could not be confirmed statistically.
+
+
+
+\chapter{Conclusion and Future Work}
+
+\section{Conclusion}
+To automatically generate Android black-box tests with the MIO algorithm, a fitness function is needed, which provides both a good search performance (i.e. covers many branches in few iterations) and a low computational complexity (leading to less time spent on each iteration).
+In the past, branch distance, the most widely used fitness function in this context, proved to be unwieldy in space and time complexity.
+This is why in this work, we proposed code-based fitness, a fitness function which is simpler to compute.
+To compare the search performance, we executed the MIO algorithm with both fitness functions on a set of apps with a set amount of iterations and compared their success rates.
+To gain further insight into the search behaviour with the two fitness functions, we compared the ruggedness and neutrality of the underlying fitness landscape.
+
+The results showed that while branch distance had decent success rates for all branches, code-based fitness had perfect success rates on many branches but also completely failed on many other branches.
+The main result regarding the fitness landscape was that code-based fitness generates a more neutral landscape than branch distance, even generating a set of completely flat walks. 
+Unfortunately, we were not able to explain the performance result with the fitness landscape.
+A small case study showed that the code-based fitness function lacks guidance in finding the correct class when many classes are in the same package and correspond to activities in the GUI.
+
+\section{Future Work}
+
+\subsection*{Direct Analysis of MIO}
+The biggest open question of this work is why MIO failed on so many branches with code-based fitness.
+One possible way to answer this question could be to analyse an execution of MIO directly.
+In its simplest form, one could log the fitness of the best test for each objective in each generation and then analyse the resulting fitness sequences, but more information could be added to the analysis, e.g. whether fitness improvements are usually made by mutation or random sampling.
+
+\subsection*{Bigger Dataset}
+The selection of apps in this work was very limited, which is why in future experiments of this kind, the number of apps should be expanded, especially to include more complex apps.
+For this, multiple issues with the MATE framework need to be addressed, like the high memory usage.
+Also, other performance bottlenecks than the fitness function should be looked into.
+
+\subsection*{Fitness Function Performance Comparison}
+In this work, it was assumed that code-based fitness is more lightweight than branch distance because that is what both intuition and practical experience suggest.
+However, to get a better understanding of the computational performance of both fitness functions, an empirical experiment should be conducted.
+
+\subsection*{Improve Fitness Landscape Analysis}
+The fitness landscape measures employed in this work could not explain the success rates of the MIO execution.
+To gain insight into why they did not work and maybe find measures that do work, the case study of random walks could be expanded and different measures could be tried out on the data.
+
+
+\printbibliography
+
+All links were last followed on January 30, 2023.
+
+\appendix
+
+\pagestyle{empty}
+\renewcommand*{\chapterpagestyle}{empty}
+\Versicherung
+\end{document}

@@ -1,0 +1,38 @@
+<\section[RQ3]{RQ3 - How do the two fitness functions compare overall regarding the success of the test generation with MIO}
+
+\subsection{Analysis}
+
+The first step towards representing the success of the MIO execution is to calculate the success rates from the success values.
+For every fitness function and objective, we divide the sum of the 20 success values by 20 to receive the proportion of runs that were successful.
+For both fitness functions, the distribution of these success rates over all objectives is then represented in a violin plot.
+
+\subsection{Results}
+
+We calculated the success rates of MIO for each of the $1300$ objectives and for both fitness functions.
+The violin plots summarizing their distribution can be found in figure \ref{fig:successdist}.
+Since the distribution of the success values for code-based fitness is very extreme, we opted to additionally represent it in a three-way bar plot which shows how many values are zero and one respectively.
+
+\begin{figure}[h]
+	\includegraphics[width = 0.5\textwidth]{../jupyter/out/mio_RQ3.pdf}
+	\includegraphics[width = 0.5\textwidth]{../jupyter/out/mio_success_code_based_three_bins.pdf}
+	\caption{Distribution of the success values from the MIO runs}\label{fig:successdist}
+\end{figure}
+
+\subsection{Discussion}
+
+Figure \ref{fig:successdist} shows that for code-based fitness, most branches have a success rate of either zero or one.
+There are more branches with success values of one than there are branches with success values of zero, which is why the median is also very close to one.
+For branch distance on the other hand, the distribution is rather balanced around a median of roughly $0.5$. No branches had a success rate of zero and only three had a success rate of one.
+
+While the median of the success rates of code-based fitness is much higher than the median for branch distance, one has to take into account that branch distance was to some extent successful for every branch, while code-based fitness failed entirely for many branches.
+
+What counts in the end for the tester is the total amount of covered branches, and there are three arguments which do not support that code-based fitness is better based on this decision criterion:
+\begin{itemize}
+	\item Firstly, using branch distance, all branches can surely be covered given enough search budget. For code based fitness, it is unclear, weather some branches can be covered at all.
+	\item Secondly, the number of covered branches is a total, which means that the mean can be argued to be more meaningful from a decision-making perspective than the median \cite{holt2009mean}. The mean success is $0.570385$ for code-based fitness and $0.543692$ for branch distance, which is not a big difference.
+	\item Thirdly, even though code-based fitness lead to many branches with a success rate of $1.0$, it is a possibility that this is not caused by the fitness function but by a mechanism of MIO itself. During the search, MIO prioritizes the objectives, where it is easy to make fitness improvements over the ones, where improvements are hard to achieve. It could very well be that MIO is so successful on many branches with code-based fitness, because it saves search budget on the many unsuccessful branches.
+\end{itemize}
+
+\begin{mdframed}[style=box, frametitle={Summary RQ3:}, nobreak=true]
+	With the code-based fitness function, MIO entirely fails on a large set of branches, while the branch distance function is partially successful on all branches. This means that the branch distance function seems more suited for the MIO algorithm than the code-based fitness function.
+\end{mdframed}

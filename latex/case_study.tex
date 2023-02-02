@@ -1,0 +1,98 @@
+\section{Case Study}
+Unfortunately, the four applied fitness landscape measures could not supply satisfying results regarding the effect of the fitness landscape on MIO search behaviour with the two fitness functions.
+This is the reason why in a small case study, we look at selected random walks directly to get a more hands-on idea of the fitness landscape and gain impulses on how to improve the fitness landscape analysis for the problem class of Android test generation.
+The organization of this section is similar to the research questions, but the results and analysis parts are merged.
+
+\subsection{Analysis}
+The most surprising result of the research questions was that for code-based fitness, while there is both a sizeable amount of branches for which MIO is unsuccessful and a sizeable amount of branches for which the neutrality is very high, there does not seem to be a noteworthy correlation between these two effects.
+This is why we choose two branches for the case study, one with a mean success rate of $0.0$ with code-based fitness, and one with a mean success rate of $1.0$.
+Since flat walks are not interesting to look at, we exclude them from the case study.
+For better comparability, we choose the branches only from the app rentalcalc.
+From both categories, we sample one branch at random.
+The two resulting branches each yield 20 random walks with code-based fitness.
+The goal of this section is a hands-on analysis of the fitness sequences from the random walks.
+
+The analysis is mainly based on the following questions:
+\begin{enumerate}
+	\item Did the random walks cover the objective at any point?
+	\item What distinctive features do the walks have?
+	\item How can these features be explained by the fitness function and the app under test?
+\end{enumerate}
+ 
+
+\subsection{Results \& Discussion}
+
+The sampled branches for the four categories are the 202nd branch and the 59th branch of the application.
+In table \ref{case-branches}, these branches are listed with the mean success and (rounded) mean measure values.
+
+\begin{table}[h]
+	\centering
+	\caption{The branches selected for the case study}
+	\label{case-branches}
+	\begin{tabular}{lrrrrr}
+		\toprule
+		Objective & Success & Autocorr. & IC & N. distance & N. volume \\
+		\midrule
+		protect.rentalcalc202 & 0 & 0.25& 0.30 & 18.9 & 76.4 \\
+		protect.rentalcalc59 & 1 & 0.18 & 0.14 & 42.7 & 31.4 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\subsubsection{protect.rentalcalc202}
+This objective was covered by every single random walk.
+The walks had fitness value $0.222222$ most of the time but had singular peaks at $1.0$.
+For any of the $20$ walks, between $683$ and $711$ of the fitness values were $0.222222$, while between $40$ and $68$ were $1.0$.
+
+What does a code-based fitness value of $0.222222$ represent semantically?
+Most likely, the mathematical result of the fitness calculation would actually be $\frac{2}{9}$.
+Since $\frac{2}{9} < \frac{1}{3}$, we are in the else part of equation \ref{eq:codeBasedFitness}, which is defined as $0 + \frac{1}{3} \cdot \frac{\max \{i | p_i = \tilde{p}_i\}}{\max \{l, \tilde{l}\}}$. To receive $\frac{2}{9}$ from this equation, it must hold that $\frac{\max \{i | p_i = \tilde{p}_i\}}{\max \{l, \tilde{l}\}} = \frac{2}{3}$.
+Since the class containing protect.rentalcalc202 is on the third level in the package structure, it holds that $\max \{l, \tilde{l}\} = 3$, which means that $\max \{i | p_i = \tilde{p}_i\} = 2$.
+
+This means that the random walks trivially reached the correct package, but the correct class was harder to find. As soon as code in the correct class was executed, the whole branch was covered.
+Unfortunately, the fitness function does not provide guidance for finding the correct class in this scenario.
+In the app rentalcalc, almost all classes are in the same package and many important classes correspond to exactly one activity.
+Code-based fitness provides no incentive for the search to discover all activities, which would cover many branches across many classes.
+
+\subsubsection{protect.rentalcalc59}
+In contrast to protect.rentalcalc202, this branch has a success rate of $1$, meaning it was covered by every MIO run.
+Interestingly though, it was only covered by $11$ of the $20$ random walks, while the previous branch was covered by all random walks.
+For a better overview of the other fitness values that occur in the random walks, we counted the appearances of every distinct fitness value for each random walk (table \ref{59levels}).
+The value $0.222222$ again occurs when the search does not find the correct class, $0.333333$ occurs when the correct class is found but not the correct method and
+$0.904762$ occurs when the correct method is covered and there is a specific distance between the nearest covered branch to the target branch.
+Compared to the previous branch, code-based fitness provides more guidance here, which should have a positive impact on the search.
+This cannot fully explain though, why this branch was successfully covered by MIO compared to protect.rentalcalc202, because this branch actually generated the value $0.222222$ more often than the previous one, meaning that the probability for protect.rentalcalc59 to get any fitness improvement at all is lower than the probability for protect.rentalcalc202 to be covered.
+
+\begin{table}[h]
+	\centering
+	\caption{Occurrences of different fitness values in every random walk for protect.rentalcalc59}
+	\label{59levels}
+	\begin{tabular}{lrrrr}
+		\toprule
+		& \multicolumn{4}{l}{Occurrences of the fitness value...}\\
+		Walk & 0.222222 & 0.904762 & 0.333333 & 1.000000 \\
+		\midrule
+		0 & 735 & 2 & 13 & 1 \\
+		1 & 730 & 4 & 16 & 1 \\
+		2 & 733 & 5 & 13 & 0 \\
+		3 & 732 & 8 & 10 & 1 \\
+		4 & 732 & 1 & 18 & 0 \\
+		5 & 730 & 1 & 19 & 1 \\
+		6 & 728 & 2 & 19 & 2 \\
+		7 & 744 & 3 & 4 & 0 \\
+		8 & 728 & 6 & 17 & 0 \\
+		9 & 729 & 10 & 12 & 0 \\
+		10 & 731 & 7 & 11 & 2 \\
+		11 & 736 & 2 & 10 & 3 \\
+		12 & 744 & 1 & 6 & 0 \\
+		13 & 733 & 6 & 12 & 0 \\
+		14 & 730 & 11 & 10 & 0 \\
+		15 & 732 & 4 & 10 & 5 \\
+		16 & 730 & 5 & 14 & 2 \\
+		17 & 732 & 7 & 12 & 0 \\
+		18 & 726 & 10 & 12 & 3 \\
+		19 & 727 & 5 & 18 & 1 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+

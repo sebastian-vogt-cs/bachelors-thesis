@@ -1,0 +1,43 @@
+\section[RQ4]{RQ4 - Is there a per-objective statistical difference regarding the success of the MIO executions with the two fitness functions?}
+
+\subsection{Analysis}
+
+The analysis for RQ4 works almost analogously to RQ2.
+We again followed the guidelines by Arcuri and Briand \cite{arcuri2011practical} for the definition of a statistical test.
+
+We want to compare the two fitness functions for per-objective statistical difference in the success values. Now we are dealing with dichotomous results, which is why we use the Fisher exact test and the odds ratio $\psi$ as a measure of effect size.
+The odds ratio, in our case, expresses which fitness function has a higher chance of success \cite{arcuri2011practical}.
+An odds ratio greater than one implies that code-based fitness has a higher chance of success than branch distance, while an odds ratio smaller than one implies the opposite.
+We add a $\rho = 0.5$ to each cell of the contingency table of the odds ratio, because otherwise cells with a value of zero lead to division by zero.
+The distribution of the effect sizes is then represented in a violin plot.
+For plotting the odds ratios, a logarithmic scale is used as suggested by Galbraith \cite{galbraith1988note}.
+
+\subsection{Results}
+
+For the MIO runs, the p-values of the Fisher exact test are represented in a histogram with bin-width $0.05$ and in a bar diagram with one bar for $p < 0.05$ and one for $p \geq 0.05$ (figure \ref{fig:mio_histogram}).
+In total, of all $1300$ branches, $1097$ resulted in a p-value smaller than $0.05$.
+
+The odds ratio effect size values are plotted in figure \ref{fig:mio_effect_size}.
+There is a violin plot for those objectives with $p < 0.05$ and one for $p \geq 0.05$.
+
+
+\begin{minipage}{\textwidth}
+	\includegraphics[width = 0.49\textwidth]{../jupyter/out/mio_p-values.pdf}
+	\includegraphics[width = 0.49\textwidth]{../jupyter/out/mio_p-values_two-bins.pdf}
+	\captionof{figure}{Distribution of p-values for the MIO runs}\label{fig:mio_histogram}
+\end{minipage}
+
+\begin{minipage}{\textwidth}
+	\centering
+	\includegraphics[width = 0.49\textwidth]{../jupyter/out/mio_effect_size.pdf}
+	\captionof{figure}{Effect size for the MIO runs}\label{fig:mio_effect_size}
+\end{minipage}
+
+\subsection{Discussion}
+
+Looking at figure \ref{fig:mio_effect_size}, for the branches, where a significant difference in MIO success was found, more branches have an odds ratio $> 1$ than $< 1$, which means that there were more branches for which code-based fitness was more successful than there are branches for which branch distance was more successful.
+As it was established in the discussion of RQ3, this result cannot be used to argue that the code-based fitness function is better than the branch distance fitness function.
+
+\begin{mdframed}[style=box, frametitle={Summary RQ4:}]
+	There are more branches, for which MIO is more successful with code-based fitness than the other way around. With the argument form RQ3, it can be argued, that this does not show that code-based fitness is better than branch distance.
+\end{mdframed}

@@ -1,0 +1,119 @@
+\section{Experimental Setup}\label{sec:experimental_setup}
+
+\subsection{Dataset}
+Sell et al.~sampled a set of 10 open source Android apps from F-Droid\footnote{\href{https://f-droid.org/en}{https://f-droid.org/en}} for their evaluation of Android integration test generation algorithms in MATE \cite{sell2019empirical}. They chose the apps randomly with a set of restrictions that make them suitable for use with their MATE framework.
+
+Unfortunately, some of these apps induced technical failures like out of memory exceptions and/or excessive execution times in our specific setting.
+These failures are partly caused by the inefficiency of MATE when handling larger apps and partly by bugs in the technical side of interacting with the apps during runtime.
+In the end, we used five different apps for the data generation of the fitness landscape analysis and three of those for the MIO executions (see table \ref{table:apps}, the apps used for the MIO execution are printed in bold).
+Although we did generate some data for activitydiary and shoppinglist, the entire data analysis is based solely on the $1300$ branches from the three apps in bold, unless noted otherwise.
+These apps were instrumented for branch coverage using the instrumentation project by Auer \cite{instrumentation}.
+
+\begin{table}[h]
+	\caption{Android apps used for the experiments}\label{table:apps}
+	\begin{center}
+		\begin{tabular}{lrr}\toprule
+			app name & version & \#branches\\
+			\midrule
+			activitydiary & 1.4.0 & 1007\\
+			\textbf{periodical} & \textbf{1.64} & \textbf{498}\\
+			\textbf{rentalcalc} & \textbf{0.5.1} & \textbf{454}\\
+			\textbf{drhoffmannsoftware} & \textbf{1.16-11} & \textbf{348}\\
+			shoppinglist & 0.11.0 & 300\\
+			\bottomrule
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\subsection{Experiment Procedure}
+
+\subsubsection{Random Walks}
+For the fitness landscape analysis, we perform random walks on the fitness landscape of the Android black-box test generation problem and then use the four measures introduced in section \ref{sec:measures} to analyse the neutrality and ruggedness of the landscape.
+
+For this, we implemented the random walk algorithm in the MATE framework. Any random walk execution in MATE explores one app - the app under test - and uses one fitness function. It starts with a randomly generated test for the app under test and then repeatedly mutates the test and logs its fitness value.
+
+We execute random walks with 750 mutation steps, resulting in fitness sequences of the length 751. This is a trade-off between the standard value from the literature of 1000 \cite{lio} and the execution time of the experiments. Even with the reduced walk-length, some random walks took up to 24 hours to complete. On each app and with both fitness functions, 20 random walks are performed to get a more representative picture of the fitness landscape.
+
+Due to the many-objective nature of MIO, we do not just receive one fitness sequence per random walk, but a sequence of fitness vectors, where the entries of a fitness vector correspond to the objectives (branches) in the app under test. We can also interpret this as receiving one fitness sequence for every random walk and objective. 
+
+To every one of these fitness sequences, our measures of neutrality and ruggedness can be applied. The resulting data is exemplified in table \ref{table:walks}, which represents how the results could look like with two repetitions per app and on the apps A and B which each have 2 branches. Also, only one measure instead of all four is given.
+
+Unfortunately, the information content measure cannot be blindly applied to the random walks (see section \ref{sec:aggr}).
+Before that, equation \ref{eq:directaggr} must be verified for the results of our random walks.
+In the following, this is known as \textbf{RQ0}.
+
+\begin{table}
+	\caption{Mock results of the random walks}\label{table:walks}
+	\begin{center}
+		\begin{tabular}{rllrr}\toprule
+			observation & fitness function & objective & repetition & measure\\
+			\midrule
+			
+			0 & code-based & A branch 0 & 0 & 0.7\\
+			1 & code-based & A branch 0 & 1 & 0.6\\
+			2 & code-based & A branch 1 & 0 & 0.9\\
+			3 & code-based & A branch 1 & 1 & 0.9\\
+			
+			4 & code-based & B branch 0 & 0 & 0.3\\
+			5 & code-based & B branch 0 & 1 & 0.5\\
+			6 & code-based & B branch 1 & 0 & 0.6\\
+			7 & code-based & B branch 1 & 1 & 0.9\\
+			
+			8 & branch distance & A branch 0 & 0 & 0.4\\
+			9 & branch distance & A branch 0 & 1 & 0.3\\
+			10 & branch distance & A branch 1 & 0 & 0.6\\
+			11 & branch distance & A branch 1 & 1 & 0.8\\
+			
+			12 & branch distance & B branch 0 & 0 & 0.4\\
+			13 & branch distance & B branch 0 & 1 & 0.5\\
+			14 & branch distance & B branch 1 & 0 & 0.6\\
+			15 & branch distance & B branch 1 & 1 & 0.6\\
+			
+			\bottomrule
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\subsubsection{MIO Runs}
+
+To get information about how MIO performs using each fitness function respectively, we run the MIO algorithm (which is already available in MATE) on our sample apps.
+For each run, we chose an iteration number of 200, which is a trade-off to reduce execution times.
+Similarly to the random walks, the iteration number was chosen such that the execution time of one run stays under $24$ hours.
+We execute 20 MIO runs per app and fitness function.
+
+Since a test is only useful if it covers a specific branch, we do not obtain entire fitness sequences from our MIO runs, but rather just a success value, which is $1$ if a branch was covered during the run and $0$ otherwise.
+That means that for each fitness function and objective, we receive 20 success values. An exemplification of the resulting data analogous to table \ref{table:walks} for the random walks can be found in table \ref{table:runs}.
+
+The hyperparameters of MIO were set to their standard settings suggested in MIO's introductory paper \cite{arcuri2018test}. The random sampling probability $P_r$, amount of mutations per sampled test $m$ and population size limit $n$ were set to $P_r = 0.5$, $n = 10$, $m = 1$ for the exploration and to $P_r = 0$, $n = 1$, $m = 10$ for the focused search with the start of the focused search $F$ being set to $F = 0.5$.
+
+\begin{table}
+	\caption{Example results of the MIO runs}\label{table:runs}
+	\begin{center}
+		\begin{tabular}{rrlrr}\toprule
+			observation & fitness function & objective & repetition & success\\
+			\midrule
+			
+			0 & code-based & A branch 0 & 0 & 0\\
+			1 & code-based & A branch 0 & 1 & 0\\
+			2 & code-based & A branch 1 & 0 & 0\\
+			3 & code-based & A branch 1 & 1 & 1\\
+			
+			4 & code-based & B branch 0 & 0 & 1\\
+			5 & code-based & B branch 0 & 1 & 0\\
+			6 & code-based & B branch 1 & 0 & 0\\
+			7 & code-based & B branch 1 & 1 & 1\\
+			
+			8 & branch distance & A branch 0 & 0 & 1\\
+			9 & branch distance & A branch 0 & 1 & 1\\
+			10 & branch distance & A branch 1 & 0 & 0\\
+			11 & branch distance & A branch 1 & 1 & 1\\
+			
+			12 & branch distance & B branch 0 & 0 & 0\\
+			13 & branch distance & B branch 0 & 1 & 0\\
+			14 & branch distance & B branch 1 & 0 & 1\\
+			15 & branch distance & B branch 1 & 1 & 0\\
+			
+			\bottomrule
+		\end{tabular}
+	\end{center}
+\end{table}

@@ -1,0 +1,52 @@
+\section[RQ5]{RQ5 - Can performance differences between the fitness functions be explained by the properties of the fitness landscape?}\label{sec:rq5}
+
+\subsection{Analysis}
+
+The analysis of RQ5 is done for every fitness landscape measure, but for simplicity, the following explanation just speaks of \emph{the measure}. Analogously, we speak of only one effect size value for every branch, while in actuality, there are 4, which have to be viewed separately.
+
+The previous RQs resulted in an odds ratio and a Vargha-Delaney effect size for every branch.
+Based on this data, we now want to find out if a comparatively higher/lower measure value for code-based fitness coincides with a higher/lower success rate.
+For example, we want to know if branches, where code-based fitness generates a more neutral landscape than branch distance, also have a comparatively lower success rate for code-based fitness.
+Since we require the relationship between the two fitness functions to be factored into our analysis of association, it does not suffice to calculate the correlation coefficient between measure values and success rates.
+Rather, we want to calculate Pearson's correlation between the Vargha-Delaney effect sizes and the odds ratios.
+This yields a scatter plot, a p-value, and a correlation coefficient.
+We take as a data basis all the objectives where both the measure and the MIO success yield p-values smaller than $0.05$.
+
+Since the main results from RQ1-4 were that code-based fitness generates comparatively high neutrality and comparatively many unsuccessful runs, we are especially interested in the results for the two measures of neutrality.
+The obvious hypothesis is, that code-based fitness being less successful in the MIO runs coincides with it having a more neutral landscape.
+
+\subsection{Result}
+The scatter plots can be found in figure \ref{fig:rq5} and the p- and r-values can be found in table \ref{table:correlations}.
+
+\begin{figure}[h]
+	\includegraphics[width = 0.5\textwidth]{../jupyter/out/big_corr_neutrality_distance.pdf}
+	\includegraphics[width = 0.5\textwidth]{../jupyter/out/big_corr_neutrality_volume.pdf}
+	\includegraphics[width = 0.5\textwidth]{../jupyter/out/big_corr_information_content.pdf}
+	\includegraphics[width = 0.5\textwidth]{../jupyter/out/big_corr_autocorrelation.pdf}
+	\caption{Scatter plots for RQ5}\label{fig:rq5}
+\end{figure}
+
+\begin{table}[h]
+	\caption{P-values and correlation coefficients}\label{table:correlations}
+	\begin{center}
+		\begin{tabular}{lrr}\toprule
+			measure & p-value & Pearson's r\\
+			\midrule
+			neutrality distance & 0.69 & -0.013\\
+			neutrality volume & 0.25 & 0.036\\
+			information content & 0.51 & 0.021\\
+			autocorrelation & 0.11 & -0.066\\
+			\bottomrule
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\subsection{Discussion}
+
+As we can see in figure \ref{fig:rq5} and table \ref{table:correlations}, neither is there a visible association between odds ratios and effect sizes in the scatter plots, nor do the p-values suggest a significant correlation.
+For autocorrelation, the p-value of $0.11$ is low enough to at least cautiously suggest a correlation, but the r-value of $-0.066$ is negligible in magnitude.
+This also means that the hypothesized correlation between the difference in success and the difference in neutrality could not be found.
+
+\begin{mdframed}[style=box, frametitle={Summary RQ5:}]
+	No correlation between performance differences and differences in the fitness landscapes could be found.
+\end{mdframed}
