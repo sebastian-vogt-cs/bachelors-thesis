@@ -23,7 +23,16 @@ and mio can be executed
 3. RQ0 can be executed at any time, but it will take long, since it does not take advantage of pre-computed measures
 4. before running the rest, mergemasterdata must be executed.
 It can only be executed after step 1
-5. 
+5. randomwalks has to be executed after branch_selection
+
+## Notes
+* The branch_selection currently does nothing but save the branches, that were used in the case study in the thesis,
+to a file.
+In order to sample new branches, remove the third last cell.
+Beware though, that in randomwalks the branches are hardcoded, so you have to adapt this file after sampling new
+branches
+* The tex-tables generated for the case study are not exactly the same that were used in the paper.
+In the paper, the values might be hardcoded and in a different order or formatted differently.
 
 ## Python Packages
 I would recommend to just trie and run the notebooks and install anything that is missing, but jut in case, I listed 
