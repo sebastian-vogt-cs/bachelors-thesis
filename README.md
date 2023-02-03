@@ -11,6 +11,15 @@ The following repos and branches are needed to reproduce my work:
 * For reproduction on your local Linux installation you could use the randomWalksLinux and mioLinux branches of the commander, but the explanations in this readme are only for cluster execution.
 * [AndroidAnalysis](https://gitlab.infosun.fim.uni-passau.de/auermich/androidanalysis) on the branches randomWalks and mioRuns
 
+## The Android env
+The following directions require an archive called android_env.tar.gz. For more information refer to the readme of [MATE](https://gitlab.infosun.fim.uni-passau.de/se2/mate/mate).
+I will shortly explain the most important configurations of my emulator in the android env:
+* name: testAVD
+* device: Nexus 5
+* version: Android 7.1.1 x86
+* RAM: 4096 MB
+* VM heap: 576 MB
+
 ## Reproduction of the Random Walks on the Cluster
 For reproducing the experiments, you need access to the university SLURM cluster.
 The explanation for the reproduction assumes no MATE environment is currently set up in your scratch folder.
