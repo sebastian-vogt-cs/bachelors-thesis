@@ -10,7 +10,7 @@ configuration
 
 ## Before Running the Notebooks
 Before running anything, please open `modules/constant.py` and make sure that all paths are set correctly.
-Importantly, you need to set the path to the androidAnalysis project
+Importantly, you need to set the path to the `AndroidAnalysis` project
 (preferably at revision b4925bcc6cc222cd6b999d1a5a203a2cfb10e55d, branch mioRuns, but other versions should work too)
 
 ## Order to Run the Notebooks in
