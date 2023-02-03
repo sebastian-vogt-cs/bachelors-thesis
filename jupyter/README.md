@@ -14,16 +14,16 @@ Importantly, you need to set the path to the `AndroidAnalysis` project
 (preferably at revision b4925bcc6cc222cd6b999d1a5a203a2cfb10e55d, branch mioRuns, but other versions should work too)
 
 ## Order to Run the Notebooks in
-1. generatemasterdata2: This pre-calculates the fitness landscape measures.
+1. `generatemasterdata2`: This pre-calculates the fitness landscape measures.
 It can take some time.
 Most other notebooks will not work without first running this.
 You do not have to run it twice, since the results are saved to disk
-2. Now, autocorrelation, neutralitdydistance, neutralityvolume, informationcontent 
-and mio can be executed
-3. RQ0 can be executed at any time, but it will take long, since it does not take advantage of pre-computed measures
-4. before running the rest, mergemasterdata must be executed.
+2. Now, `autocorrelation`, `neutralitdydistance`, `neutralityvolume`, `informationcontent` 
+and `mio` can be executed
+3. `RQ0` can be executed at any time, but it will take long, since it does not take advantage of pre-computed measures
+4. before running the rest, `mergemasterdata` must be executed.
 It can only be executed after step 1
-5. randomwalks has to be executed after branch_selection
+5. `randomwalks` has to be executed after `branch_selection`
 
 ## Notes
 * The branch_selection notebook currently does nothing but save the branches, that were used in the case study in the thesis,
@@ -31,11 +31,11 @@ to a file.
 In order to sample new branches, remove the third-last cell.
 Beware though, that in randomwalks the branches are hardcoded, so you have to adapt this file after sampling new
 branches
-* The tex-tables generated for the case study are not exactly the same that were used in the paper.
-In the paper, the values might be hardcoded and in a different order or formatted differently.
+* The tex-tables generated for the case study are not exactly the same that were used in the thesis.
+In the thesis, the values might be hardcoded and in a different order or formatted differently.
 
 ## Python Packages
-I would recommend to just trie and run the notebooks and install anything that is missing, but jut in case, I listed 
+I would recommend to just try and run the notebooks and install anything that is missing, but jut in case, I listed 
 all the packages included in my working configuration (not all are needed probably)
 
     Package                  Version
