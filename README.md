@@ -88,7 +88,7 @@ The explanation for the reproduction assumes no MATE environment is currently se
 * For the possible apps, set the number to the amount of runs you want to start for that app and fitness function
 * After setting everything the way you want it (most things can be left the way they are, except the apps that do not work), exit the editor.
 * Now execute `/scratch/<username>/test_dir/genereate_configs.py`
-* Edit the file `/scratch/<username>/home/test_dir/batch_run.py`, so that the correct cluster nodes are used. The random walks are preferably executed on ponipine, but zeus works as well
+* Edit the file `/scratch/<username>/home/test_dir/batch_run.py`, so that the correct cluster nodes are used. The mio runs are preferably executed on ponipine, but zeus works as well
 * Execute `/scratch/<username>/home/test_dir/batch_run.py`
 
 ## Extraction of the MIO Runs
