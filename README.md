@@ -39,7 +39,7 @@ The explanation for the reproduction assumes no MATE environment is currently se
 * Beware that for the random walks, the whole run is stopped and continued 6 times, which means that in order to reach 751 iterations, the iteration number must be 125
 * The rest of the configurations can be edited in the other dicts
 * The last two dicts in this list of dicts are `remainingWdhsDistance` and `remainingWdhsNoDistance`, which contain the number of runs you want to do for each app for branch distance and code-based fitness respectively (code-based is called NoDistance here)
-* Only the five apps that are included in the paper can be used, even though there are more apps listed in the template `generate_configs.py`. Please delete the other apps or set the number to 0. (The last 5 apps in the list are possible)
+* Only the five apps that are included in the paper can be used, even though there are more apps listed in the template `generate_configs.py`. Please set the number of runs to 0 for the other apps. (The last 5 apps in the list are possible)
 * For the other apps, set the number to the amount of runs you want to start for that app and fitness function
 * After setting everything the way you want it (most things can be left the way they are, except the apps that do not work), exit the editor.
 * Execute `cp -r bachelor-thesis-apps/apps appsBranch` in `/scratch/<username>/home/test_dir`
@@ -84,7 +84,7 @@ The explanation for the reproduction assumes no MATE environment is currently se
 * In contrast to the random walks, the iterations number for mio runs is the actual number of iterations
 * The rest of the configurations can be edited in the other dicts
 * The last two dicts in this list of dicts are remainingWdhsDistance and remainingWdhsNoDistance, which contain the number of runs you want to do for each app for branch distance and code-based fitness respectively (code-based is called NoDistance here)
-* Only the five apps that are included in the paper can be used, even though there are more apps listed in the template `generate_configs.py`. Please delete the other apps or set the number to 0. (The last 5 apps in the list are possible)
+* Only the five apps that are included in the paper can be used, even though there are more apps listed in the template `generate_configs.py`. Please set the number of runs to 0 for the other apps. (The last 5 apps in the list are possible)
 * For the other apps, set the number to the amount of runs you want to start for that app and fitness function
 * After setting everything the way you want it (most things can be left the way they are, except the apps that do not work), exit the editor.
 * Now execute `/scratch/<username>/test_dir/genereate_configs.py`
