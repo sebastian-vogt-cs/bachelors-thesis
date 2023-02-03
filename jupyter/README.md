@@ -26,9 +26,9 @@ It can only be executed after step 1
 5. randomwalks has to be executed after branch_selection
 
 ## Notes
-* The branch_selection currently does nothing but save the branches, that were used in the case study in the thesis,
+* The branch_selection notebook currently does nothing but save the branches, that were used in the case study in the thesis,
 to a file.
-In order to sample new branches, remove the third last cell.
+In order to sample new branches, remove the third-last cell.
 Beware though, that in randomwalks the branches are hardcoded, so you have to adapt this file after sampling new
 branches
 * The tex-tables generated for the case study are not exactly the same that were used in the paper.
