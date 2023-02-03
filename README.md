@@ -48,7 +48,7 @@ The explanation for the reproduction assumes no MATE environment currently set u
 * Execute `/scratch/<username>/home/test_dir/batch_run.py`
 
 ## Extraction of the Random Walks
-* Clone the AndroidAnalysis-Repository into the `/scratch/<username>` folder
+* Clone the `AndroidAnalysis` repository into the `/scratch/<username>` folder
 * Cd into the project and checkout the branch `randomWalks`
 * Open the file `config.ini` and adjust the paths, mainly by exchanging my username with your's
 * Set the `walk_len` to the length of your walks (if you specified an iteration number of x, the walk length is 6x + 1)
@@ -92,7 +92,7 @@ The explanation for the reproduction assumes no MATE environment currently set u
 * Execute `/scratch/<username>/home/test_dir/batch_run.py`
 
 ## Extraction of the MIO Runs
-* Clone the AndroidAnalysis into the `/scratch/<username>` folder
+* Clone the `AndroidAnalysis` repository into the `/scratch/<username>` folder
 * Cd into the project and checkout the branch `mioRuns`
 * Open the file `config.ini` and adjust the paths, mainly by exchanging my username with your's
 * Set the `walk_len` to the length of your walks (if you specified an iteration number of x, the walk length is x + 1)
