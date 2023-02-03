@@ -12,7 +12,7 @@ The following repos and branches are needed to reproduce my work:
 * [AndroidAnalysis](https://gitlab.infosun.fim.uni-passau.de/auermich/androidanalysis) on the branches randomWalks and mioRuns
 
 ## The Android env
-The following directions require an archive called android_env.tar.gz. For more information refer to the readme of [MATE](https://gitlab.infosun.fim.uni-passau.de/se2/mate/mate).
+The following directions require an archive called android_env.tar.gz. For more information refer to the readme of [MATE-Commander](https://gitlab.infosun.fim.uni-passau.de/se2/mate/mate-commander).
 I will shortly explain the most important configurations of my emulator in the android env:
 * name: testAVD
 * device: Nexus 5
