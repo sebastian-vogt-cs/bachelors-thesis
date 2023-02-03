@@ -2,7 +2,7 @@
 * You need to know how to run jupyter notebooks.
 * I prefer to run them in PyCharm or DataSpell and tested with these IDEs, but it should work with the vanilla jupyter
 IDE
-* If using dark a theme with a JetBrains IDE, disable 'Languages & Frameworks > Jupyter >
+* If using a dark theme with a JetBrains IDE, disable 'Languages & Frameworks > Jupyter >
 Invert image output for dark themes', so that the graphics are represented in the same colors as in the thesis
 * It probably works with most python 3 installations, but you might need to install some extra packages
 * I personally used a venv with python 3.11, at the end of the readme I listed all packages installed in my working
