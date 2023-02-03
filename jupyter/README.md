@@ -17,7 +17,7 @@ Importantly, you need to set the path to the `AndroidAnalysis` project
 1. generatemasterdata2: This pre-calculates the fitness landscape measures.
 It can take some time.
 Most other notebooks will not work without first running this.
-You do not have to run it twice, since the results are saves to disk
+You do not have to run it twice, since the results are saved to disk
 2. Now, autocorrelation, neutralitdydistance, neutralityvolume, informationcontent 
 and mio can be executed
 3. RQ0 can be executed at any time, but it will take long, since it does not take advantage of pre-computed measures
