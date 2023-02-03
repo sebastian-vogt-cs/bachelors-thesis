@@ -14,7 +14,7 @@ Importantly, you need to set the path to the androidAnalysis project
 (preferably at revision b4925bcc6cc222cd6b999d1a5a203a2cfb10e55d, branch mioRuns, but other versions should work too)
 
 ## Order to Run the Notebooks in
-1. generatemasterdata2: This pre-calculares the fitness landscape measures.
+1. generatemasterdata2: This pre-calculates the fitness landscape measures.
 It can take some time.
 Most other notebooks will not work without first running this.
 You not have to run it twice, since the results are saves to disk
