@@ -1,5 +1,7 @@
 # Repository of my Bachelor's Thesis
 This repository supplies the files and information needed to reproduce the experiments from my bachelor's thesis.
+This readme contains all the information needed to reproduce my MATE runs on the cluster.
+At the end of the file, an overview of all files and folder in this repo is given, which also explains what to do next.
 
 ## Other Repositories needed
 The following repos and branches are needed to reproduce my work:
