@@ -10,4 +10,4 @@ In the following, the versions of the apps included in the zip are given and mod
 * [drhoffmannsoftware](https://f-droid.org/de/packages/de.drhoffmannsoftware/): Version 1.16-11
 
 ## Modification done to the apps
-All apps were instrumented for branch coverage with the [instrumentation](https://gitlab.infosun.fim.uni-passau.de/auermich/instrumentation) project
+All apps were instrumented for branch distance with the [instrumentation](https://gitlab.infosun.fim.uni-passau.de/auermich/instrumentation) project
