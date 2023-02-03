@@ -1,4 +1,13 @@
 # Repository of my Bachelor's Thesis
+This repository supplies the files and information needed to reproduce the experiments from my bachelor's thesis.
+
+## Other Repositories needed
+The following repos and branches are needed to reproduce my work:
+* MATE on the branches randomWalks and mioRuns
+* MATE-Server on the branches randomWalks and mioRuns
+* MATE-Commander on the branches randomWalksCluster and mioCluster
+* For reproduction on your local Linux installation you could use the randomWalksLinux and mioLinux branches of the commander, but the explanations in this readme are only for cluster execution.
+* AndroidAnalysis on the branches randomWalks and mioRuns
 
 ## Reproduction of the Random Walks on the Cluster
 * Create a `/scratch/<username>/sbatch_out` folder
