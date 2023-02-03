@@ -56,7 +56,7 @@ The explanation for the reproduction assumes no MATE environment is currently se
 * Run `python3.9 main.py config.ini <run_id>`
 * Ignore the output in `svg_dir`, the diagrams are generated in the jupyter notebooks
 * For all successful runs, the random walks will be written to `data_dir`!
-* The contents of data_dir can be copied into the `dataset/random_walks` subfolder of the bachelor's thesis repository. The jupyter notebooks will per-default search this folder for input data.
+* The contents of data_dir can be copied into the `dataset/random_walks` subfolder of the bachelor's thesis repository. The jupyter notebooks will per-default search this folder for input data. I recommend that you transfer the data to your local machine and run the jupyter notebooks there.
 * It is normal that some runs will fail. Execute the `count.py` script to figure out, how many successful runs you already have per app and fitness function. Then you know how much runs you need to retry!
 
 ## Reproduction of the MIO Runs on the Cluster
