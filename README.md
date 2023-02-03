@@ -5,11 +5,11 @@ At the end of the file, an overview of all files and folders in this repo is giv
 
 ## Other Repositories needed
 The following repos and branches are needed to reproduce my work:
-* MATE on the branches randomWalks and mioRuns
-* MATE-Server on the branches randomWalks and mioRuns
-* MATE-Commander on the branches randomWalksCluster and mioCluster
+* [MATE](https://gitlab.infosun.fim.uni-passau.de/se2/mate/mate) on the branches randomWalks and mioRuns
+* [MATE-Server](https://gitlab.infosun.fim.uni-passau.de/se2/mate/mate-server) on the branches randomWalks and mioRuns
+* [MATE-Commander](https://gitlab.infosun.fim.uni-passau.de/se2/mate/mate-commander) on the branches randomWalksCluster and mioCluster
 * For reproduction on your local Linux installation you could use the randomWalksLinux and mioLinux branches of the commander, but the explanations in this readme are only for cluster execution.
-* AndroidAnalysis on the branches randomWalks and mioRuns
+* [AndroidAnalysis](https://gitlab.infosun.fim.uni-passau.de/auermich/androidanalysis) on the branches randomWalks and mioRuns
 
 ## Reproduction of the Random Walks on the Cluster
 For reproducing the experiments, you need access to the university SLURM cluster.
