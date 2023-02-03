@@ -10,6 +10,9 @@ The following repos and branches are needed to reproduce my work:
 * AndroidAnalysis on the branches randomWalks and mioRuns
 
 ## Reproduction of the Random Walks on the Cluster
+For reproducing the experiments, you need access to the university SLURM cluster.
+The explanation for the reproduction assumes no MATE environment currently set up in your scratch folder.
+
 * Create a `/scratch/<username>/sbatch_out` folder
 * Create a `/scratch/<username>/save` folder
 * Create a `/scratch/<username>/home` folder
